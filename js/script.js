@@ -187,12 +187,12 @@ window.addEventListener('DOMContentLoaded', () => {
         return await res.json();
     };
 
-    getResource('http://localhost:3000/menu')
-        .then(data => {
-            data.forEach(({img, altimg, title, descr, price}) => {
-                new Card(img, altimg, title, descr, price, '.menu .container').render();
-            });
-        });
+    // getResource('http://localhost:3000/menu')
+    //     .then(data => {
+            // data.forEach(({img, altimg, title, descr, price}) => {
+            //     new Card(img, altimg, title, descr, price, '.menu .container').render();
+            // });
+    //     });
 
         // getResource('http://localhost:3000/menu')
         //     .then(data => createCard(data));
@@ -219,6 +219,14 @@ window.addEventListener('DOMContentLoaded', () => {
         //         document.querySelector('.menu .container').append(element);
         //     });
         // }
+
+    axios.get('http://localhost:3000/menu')
+        .then(data => {
+            data.data.forEach(({img, altimg, title, descr, price}) => {
+                new Card(img, altimg, title, descr, price, '.menu .container').render();
+            });
+        });
+
     // Forms
 
     const forms = document.querySelectorAll('form');
@@ -302,4 +310,53 @@ window.addEventListener('DOMContentLoaded', () => {
     fetch('http://localhost:3000/menu')
         .then(data => data.json())
         .then(res => console.log(res));
+
+    //Slider
+
+    const slide = document.querySelectorAll('.offer__slide'),
+          slidePrev = document.querySelector('.offer__slider-prev'),
+          slideNext = document.querySelector('.offer__slider-next'),
+          slideCurrent = document.querySelector('#current'),
+          slideTotal = document.querySelector('#total');
+    let slideIndex = 1;
+
+    showSlide(slideIndex);
+
+    if (slide.length < 10) {
+        slideTotal.textContent = `0${slide.length}`;
+    } else {
+        slideTotal.textContent = slide.length;
+    }
+
+    function showSlide(n) {
+        if (n > slide.length) {
+            slideIndex = 1;
+        }
+
+        if (n < 1) {
+            slideIndex = slide.length;
+        }
+
+        slide.forEach(item => item.style.display = 'none');
+
+        slide[slideIndex - 1].style.display = 'block';
+        
+        if (slide.length < 10) {
+            slideCurrent.textContent = `0${slideIndex}`;
+        } else {
+            slideCurrent.textContent = slideIndex;
+        }
+    }
+
+    function plusSlides(n) {
+        showSlide(slideIndex += n);
+    }
+
+    slidePrev.addEventListener('click', () => {
+        plusSlides(-1);
+    });
+
+    slideNext.addEventListener('click', () => {
+        plusSlides(1);
+    });
 });
