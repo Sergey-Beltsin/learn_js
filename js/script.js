@@ -9,6 +9,9 @@ import {openModal} from './modules/modal';
 
 
 window.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('.list-item').addEventListener('hover', function() {
+        
+    });
     
     const modalTimerId = setTimeout(() => openModal('.modal', modalTimerId), 50000);
 
